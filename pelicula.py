@@ -1,47 +1,56 @@
 peliculas = ["Los juegos del hambre", "El club de la pelea", "El gran truco", 
              "Gladiador", "Tiempos violentos"]
 
-categorias = [
-    "Los juegos del hambre - Categoría: Mejor película de Acción",
-    "El club de la pelea - Categoría: Mejor Guion",
-    "El gran truco - Categoría: Mejor Guion",
-    "Gladiador - Categoría: Mejor Drama",
-    "Tiempos violentos - Categoría: Mejor Drama"
-]
+categorias = {
+    "Los juegos del hambre": "Mejor película de Acción",
+    "El club de la pelea": "Mejor Guion",
+    "El gran truco": "Mejor Guion",
+    "Gladiador": "Mejor Drama",
+    "Tiempos violentos": "Mejor Drama"}
 
 votos = {
     "Los juegos del hambre": 0,
     "El club de la pelea": 0,
     "El gran truco": 0,
     "Gladiador": 0,
-    "Tiempos violentos": 0
-}
+    "Tiempos violentos": 0}
 
-reservas = []
+def ganadores():
+    print("Peliculas ganadoras por categoría:")
 
-print("Películas nominadas:")
-for i in categorias:
-    print("-", i)
+    for categoria in set(categorias.values()):
+        mayor = 0
+        ganador = []
+        for voto in peliculas:
+            if categorias[voto] == categoria:
+                if votos[voto] > mayor:
+                    mayor = votos[voto]
+                    ganador = [voto]
+                elif votos[voto] == mayor:
+                    ganador.append(voto)
+        if len(ganador) == 1:
+            print(f"{categoria}: {ganador[0]} con {mayor} votos")
+
 
 while True:
-    pelicula = input("\nIngrese el nombre de la película por la cual desea votar(salir para terminar): ")
+    print("Películas nominadas:")
+    for nombre, categoria in categorias.items():
+        print(f"- {nombre} ({categoria})")
 
-    if pelicula.lower() == "salir":
-        break
+    try:
+        voto = input("\nEscriva el nombre de la pelicula que desea votar (o escriba 'salir' para terminar): ")
 
-    if pelicula in peliculas:
-        votos[pelicula] += 1
+        if voto.lower() == "salir":
+            break
+        if voto not in peliculas:
+            raise ValueError("Película no válida.")
 
-        print("Películas votadas:")
-        for nombre, cantidad in votos.items():
-            print(f"{nombre} - Votos: {cantidad}")
+        votos[voto] += 1
 
-        reserva = {
-            "pelicula": pelicula,
-            "votos": votos[pelicula]
-        }
-        reservas.append(reserva)
-    else:
-        print("La película no está disponible. Intente nuevamente.")
+        print("Voto emitido con exito")
+    except:
+        print("Entrada inválida. Intente nuevamente.")
 
-print("\nGracias por participar en la votación.")
+print("\nGracias por participar en las nominacion a las mejores peliculas\n")
+
+ganadores()
